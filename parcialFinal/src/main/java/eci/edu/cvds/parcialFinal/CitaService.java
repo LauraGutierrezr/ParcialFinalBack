@@ -1,9 +1,7 @@
+package eci.edu.cvds.service;
 
-
-package com.ecisalud.service;
-
-import com.ecisalud.model.Cita;
-import com.ecisalud.repository.CitaRepository;
+import eci.edu.cvds.model.Cita;
+import eci.edu.cvds.repository.CitaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,9 +17,9 @@ public class CitaService {
     }
 
     public Cita programarCita(Cita cita) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate fechaCita = LocalDate.parse(cita.getFecha(), formatter);
-        if (fechaCita.isBefore(LocalDate.now()) || cita.getNombreCompleto().isEmpty()) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate fecha = LocalDate.parse(cita.getFecha(), fmt);
+        if (fecha.isBefore(LocalDate.now()) || cita.getNombreCompleto() == null || cita.getNombreCompleto().isEmpty()) {
             cita.setEstado("Rechazada");
         } else {
             cita.setEstado("Confirmada");
@@ -38,8 +36,8 @@ public class CitaService {
     }
 
     public Cita cancelarCita(String id) {
-        Cita cita = repo.findById(id).orElseThrow();
-        cita.setEstado("Canceladaa");
+        Cita cita = repo.findById(id).orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+        cita.setEstado("Cancelada");
         return repo.save(cita);
     }
 }

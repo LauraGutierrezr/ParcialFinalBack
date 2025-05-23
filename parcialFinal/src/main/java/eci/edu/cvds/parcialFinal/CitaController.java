@@ -1,7 +1,7 @@
-package com.ecisalud.controller;
+package eci.edu.cvds.controller;
 
-import com.ecisalud.model.Cita;
-import com.ecisalud.service.CitaService;
+import eci.edu.cvds.model.Cita;
+import eci.edu.cvds.service.CitaService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

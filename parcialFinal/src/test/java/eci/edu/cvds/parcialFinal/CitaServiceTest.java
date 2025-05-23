@@ -1,45 +1,43 @@
+package eci.edu.cvds.service;
 
+import eci.edu.cvds.model.Cita;
+import eci.edu.cvds.repository.CitaRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-package com.ecisalud.service;
-
-import com.ecisalud.model.Cita;
-import com.ecisalud.repository.CitaRepository;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.List;
 
-@Service
-public class CitaService {
-    private final CitaRepository repo;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-    public CitaService(CitaRepository repo) {
-        this.repo = repo;
+class CitaServiceTest {
+
+    private CitaRepository repo;
+    private CitaService service;
+
+    @BeforeEach
+    void init() {
+        repo = Mockito.mock(CitaRepository.class);
+        service = new CitaService(repo);
+        when(repo.save(any(Cita.class))).thenAnswer(i -> i.getArgument(0));
     }
 
-    public Cita programarCita(Cita cita) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate fechaCita = LocalDate.parse(cita.getFecha(), formatter);
-        if (fechaCita.isBefore(LocalDate.now()) || cita.getNombreCompleto().isEmpty()) {
-            cita.setEstado("Rechazada");
-        } else {
-            cita.setEstado("Confirmada");
-        }
-        return repo.save(cita);
+    @Test
+    void programar_confirmada() {
+        Cita c = new Cita(); c.setNombreCompleto("A"); c.setFecha("31-12-2099");
+        Cita out = service.programarCita(c);
+        assertEquals("Confirmada", out.getEstado());
     }
 
-    public List<Cita> obtenerPorCorreo(String correo) {
-        return repo.findByCorreo(correo);
+    @Test
+    void programar_rechazada_por_nombre() {
+        Cita c = new Cita(); c.setNombreCompleto(""); c.setFecha("31-12-2099");
+        Cita out = service.programarCita(c);
+        assertEquals("Rechazada", out.getEstado());
     }
 
-    public List<Cita> obtenerPorCorreoYEstado(String correo, String estado) {
-        return repo.findByCorreoAndEstado(correo, estado);
-    }
 
-    public Cita cancelarCita(String id) {
-        Cita cita = repo.findById(id).orElseThrow();
-        cita.setEstado("Canceladaa");
-        return repo.save(cita);
-    }
 }
