@@ -35,11 +35,8 @@ implementar un sistema que permita a los usuarios:
 
   --Jcoco
 
+![image](https://github.com/user-attachments/assets/5eb4525b-01da-4df7-b6cf-bb5a06422596)
 
-
-
-  --MongoDB
-  
 
 
 
@@ -78,5 +75,5 @@ Todo fue BUILD SUCCESS
 **Pruebas con Jacoco**
 En las pruebas de Jacoco obtengo el porcentaje
 
-<img width="1027" src="https://github.com/user-attachments/assets/a5a9cdda-52f1-4c83-9251-9dbb5c6ba56a" />
+![image](https://github.com/user-attachments/assets/a07e75a7-0cd5-49c8-b91f-71d5c0144f5d)
 
